@@ -107,8 +107,6 @@ npm run dev
 ```bash
 cd api
 npm test                  # Запуск unit тестів
-npm run test:e2e         # Запуск e2e тестів
-npm run test:cov         # Запуск тестів з покриттям коду
 ```
 
 ### Тестування Frontend
