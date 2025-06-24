@@ -100,24 +100,6 @@ cd web
 npm run dev
 ```
 
-## Скрипти
-
-### API проект
-
-- `npm run start` - запуск в продакшн режимі
-- `npm run start:dev` - запуск в режимі розробки з hot reload
-- `npm run build` - збірка проекту
-- `npm run test` - запуск тестів
-
-### Web проект
-
-- `npm run dev` - запуск в режимі розробки
-- `npm run build` - збірка проекту
-- `npm run start` - запуск збудованого проекту
-- `npm run lint` - перевірка коду
-
-## API Documentation
-
 ### Swagger UI
 
 API документація доступна через Swagger UI за адресою: `http://localhost:3001/api/swagger`
