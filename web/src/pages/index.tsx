@@ -1,5 +1,3 @@
-// pages/index.tsx
-
 import { RecipeCard } from "@/app/components/RecipeCard/RecipeCard";
 import { getRecipes } from "@/app/lib/api";
 import "../app/globals.css";
