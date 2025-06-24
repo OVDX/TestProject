@@ -29,7 +29,6 @@ const mockRecipeDetail: RecipeDetailDto = {
 
 describe('RecipesController', () => {
   let controller: RecipesController;
-  let service: RecipesService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -43,7 +42,6 @@ describe('RecipesController', () => {
     }).compile();
 
     controller = module.get<RecipesController>(RecipesController);
-    service = module.get<RecipesService>(RecipesService);
 
     jest.clearAllMocks();
   });
@@ -60,7 +58,7 @@ describe('RecipesController', () => {
       const result = await controller.getRecipes(query);
 
       expect(result).toEqual(mockRecipeList);
-      expect(service.getRecipes).toHaveBeenCalledWith(query);
+      expect(mockRecipesService.getRecipes).toHaveBeenCalledWith(query);
     });
 
     it('should throw an error if the service fails', async () => {
@@ -79,7 +77,7 @@ describe('RecipesController', () => {
       const result = await controller.getRecipeById(recipeId);
 
       expect(result).toEqual(mockRecipeDetail);
-      expect(service.getRecipeById).toHaveBeenCalledWith(recipeId);
+      expect(mockRecipesService.getRecipeById).toHaveBeenCalledWith(recipeId);
     });
 
     it('should throw HttpException if id is empty', async () => {
@@ -89,7 +87,7 @@ describe('RecipesController', () => {
         new HttpException("ID рецепта є обов'язковим", HttpStatus.BAD_REQUEST),
       );
 
-      expect(service.getRecipeById).not.toHaveBeenCalled();
+      expect(mockRecipesService.getRecipeById).not.toHaveBeenCalled();
     });
 
     it('should throw HttpException if recipe is not found', async () => {
