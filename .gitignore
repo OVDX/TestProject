@@ -1,5 +1,10 @@
 api/node_modules/
-
 api/dist/
 api/build/
 api/.env
+
+web/public
+web/node_modules/
+web/dist/
+web/env
+web/build/
