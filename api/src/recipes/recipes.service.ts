@@ -160,10 +160,6 @@ export class RecipesService {
     }
   }
 
-  async getRecipesByCategory(category: string): Promise<RecipeListDto> {
-    return this.getRecipes({ category });
-  }
-
   private transformToRecipeDetail(meal: MealApiResponse): RecipeDetailDto {
     const ingredients = extractIngredients(meal);
 

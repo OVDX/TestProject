@@ -1,3 +1,5 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
 export interface MealApiResponse {
   idMeal: string;
   strMeal: string;
@@ -44,34 +46,115 @@ export class RecipeDto {
 }
 
 export class RecipeListItemDto {
+  @ApiProperty({ description: 'ID страви.', example: '1' })
   idMeal: string;
+
+  @ApiProperty({
+    description: 'Назва страви.',
+    example: 'Teriyaki Chicken Casserole',
+  })
   strMeal: string;
+
+  @ApiProperty({
+    description: 'URL для thumbnail картинки страви.',
+    example:
+      'https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg',
+  })
   strMealThumb: string;
 }
 
-export class RecipeDetailDto {
-  id: string;
-  name: string;
-  image: string;
-  category: string;
-  area: string;
-  instructions: string;
-  ingredients: IngredientDto[];
-  tags?: string[];
-  youtube?: string;
-  source?: string;
-}
-
 export class IngredientDto {
+  @ApiProperty({
+    description: 'Назва інгредієнту.',
+    example: 'Chicken',
+  })
   name: string;
+
+  @ApiProperty({
+    description: 'Міри інгредієнту.',
+    example: '1 lb',
+  })
   measure: string;
 }
 
+export class RecipeDetailDto {
+  @ApiProperty({ description: 'ID страви.', example: '1' })
+  id: string;
+
+  @ApiProperty({
+    description: 'Назва.',
+    example: 'Teriyaki Chicken Casserole',
+  })
+  name: string;
+
+  @ApiProperty({
+    description: 'URL картинки.',
+    example:
+      'https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg',
+  })
+  image: string;
+
+  @ApiProperty({ description: 'Категорія страви.', example: 'Chicken' })
+  category: string;
+
+  @ApiProperty({
+    description: 'Країна страви.',
+    example: 'Japanese',
+  })
+  area: string;
+
+  @ApiProperty({
+    description: 'Інструкція для приготування.',
+  })
+  instructions: string;
+
+  @ApiProperty({
+    type: [IngredientDto],
+    description: 'Список інгредієнтів.',
+  })
+  ingredients: IngredientDto[];
+
+  @ApiPropertyOptional({
+    type: [String],
+    description: 'Теги страви.',
+    example: ['Chicken', 'Casserole'],
+  })
+  tags?: string[];
+  @ApiPropertyOptional({
+    description: 'URL на youtube.',
+    example: 'https://www.youtube.com/watch?v=gOU1uZH1C1E',
+  })
+  youtube?: string;
+
+  @ApiPropertyOptional({
+    description: 'URL на оригінальне посилання.',
+  })
+  source?: string;
+}
+
+class RecipeListFilterDto {
+  @ApiProperty({
+    enum: ['ingredient', 'country', 'category', 'all'],
+    description: 'тип фільтру.',
+  })
+  type: 'ingredient' | 'country' | 'category' | 'all';
+
+  @ApiPropertyOptional()
+  value?: string;
+}
+
 export class RecipeListDto {
+  @ApiProperty({
+    type: [RecipeListItemDto],
+  })
   recipes: RecipeListItemDto[];
+
+  @ApiProperty({
+    example: 15,
+  })
   total: number;
-  filter?: {
-    type: 'ingredient' | 'country' | 'category' | 'all';
-    value?: string;
-  };
+  @ApiPropertyOptional({
+    type: RecipeListFilterDto,
+  })
+  filter?: RecipeListFilterDto;
 }
