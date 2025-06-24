@@ -37,4 +37,7 @@ async function bootstrap() {
   logger.log(`Swagger Docs available at: http://localhost:${port}/api/swagger`);
 }
 
-bootstrap();
+bootstrap().catch((err) => {
+  console.error('Помилка під час запуску додатку:', err);
+  process.exit(1);
+});

@@ -1,0 +1,300 @@
+
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.headerContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #6b7280;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.activeFilters {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.filtersLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.filterTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.filterTag {
+  display: inline-block;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 16px;
+  border: 1px solid #bfdbfe;
+}
+
+.searchSection {
+  margin-bottom: 40px;
+}
+
+.resultsSection {
+  margin-bottom: 40px;
+}
+
+.resultsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 0 4px;
+}
+
+.resultsInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.resultsCount {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.resultsFiltered {
+  font-size: 14px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.recipesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 0;
+}
+.noResults {
+  text-align: center;
+  padding: 60px 20px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.noResultsIcon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+.noResultsTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 12px 0;
+}
+
+.noResultsText {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0 0 24px 0;
+  line-height: 1.6;
+}
+
+.suggestions {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: left;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.suggestionsTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 12px 0;
+}
+
+.suggestionsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.suggestionsList li {
+  font-size: 14px;
+  color: #6b7280;
+  padding-left: 16px;
+  position: relative;
+}
+
+.suggestionsList li::before {
+  content: "•";
+  color: #9ca3af;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+@media (max-width: 1024px) {
+  .recipesGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 20px 16px;
+  }
+  
+  .header {
+    margin-bottom: 28px;
+  }
+  
+  .title {
+    font-size: 28px;
+  }
+  
+  .subtitle {
+    font-size: 16px;
+  }
+  
+  .searchSection {
+    margin-bottom: 32px;
+  }
+  
+  .resultsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .resultsInfo {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .recipesGrid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  
+  .activeFilters {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .filterTags {
+    gap: 6px;
+  }
+  
+  .noResults {
+    padding: 40px 16px;
+    border-radius: 12px;
+  }
+  
+  .noResultsIcon {
+    font-size: 40px;
+  }
+  
+  .noResultsTitle {
+    font-size: 20px;
+  }
+  
+  .noResultsText {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 16px 12px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .subtitle {
+    font-size: 15px;
+  }
+  
+  .recipesGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .filterTag {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+  
+  .resultsCount {
+    font-size: 15px;
+  }
+  
+  .resultsFiltered {
+    font-size: 13px;
+  }
+}
+
+.recipesGrid > * {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

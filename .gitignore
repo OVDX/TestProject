@@ -8,3 +8,5 @@ web/node_modules/
 web/dist/
 web/env
 web/build/
+web/.next
+

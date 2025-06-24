@@ -37,7 +37,11 @@ export class RecipesController {
     try {
       return await this.recipesService.getRecipes(queryDto);
     } catch (error) {
-      this.logger.error('Error in getRecipes:', error.message);
+      if (error instanceof Error) {
+        this.logger.error('Error in getRecipes:', error.message);
+      } else {
+        this.logger.error('An unknown error occurred in getRecipes:', error);
+      }
       throw error;
     }
   }
@@ -81,7 +85,17 @@ export class RecipesController {
     try {
       return await this.recipesService.getRecipeById(id);
     } catch (error) {
-      this.logger.error(`Error in getRecipeById for ID ${id}:`, error.message);
+      if (error instanceof Error) {
+        this.logger.error(
+          `Error in getRecipeById for ID ${id}:`,
+          error.message,
+        );
+      } else {
+        this.logger.error(
+          `An unknown error occurred in getRecipeById for ID ${id}:`,
+          error,
+        );
+      }
       throw error;
     }
   }

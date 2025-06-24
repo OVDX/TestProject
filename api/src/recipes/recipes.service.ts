@@ -2,6 +2,7 @@ import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
+import { isAxiosError } from 'axios';
 import {
   MealApiResponse,
   RecipeListItemDto,
@@ -46,42 +47,39 @@ export class RecipesService {
   }
 
   async getRecipes(queryDto: QueryRecipesDto): Promise<RecipeListDto> {
+    let url: string;
+    let filterType: 'ingredient' | 'country' | 'category' | 'all' = 'all';
+    let filterValue: string | undefined;
+
+    if (queryDto.ingredient) {
+      url = `${this.baseUrl}/filter.php?i=${encodeURIComponent(queryDto.ingredient)}`;
+      filterType = 'ingredient';
+      filterValue = queryDto.ingredient;
+    } else if (queryDto.country) {
+      url = `${this.baseUrl}/filter.php?a=${encodeURIComponent(queryDto.country)}`;
+      filterType = 'country';
+      filterValue = queryDto.country;
+    } else if (queryDto.category) {
+      url = `${this.baseUrl}/filter.php?c=${encodeURIComponent(queryDto.category)}`;
+      filterType = 'category';
+      filterValue = queryDto.category;
+    } else if (queryDto.search) {
+      url = `${this.baseUrl}/search.php?s=${encodeURIComponent(queryDto.search)}`;
+      filterType = 'all';
+      filterValue = queryDto.search;
+    } else {
+      url = `${this.baseUrl}/search.php?s=`;
+      filterType = 'all';
+    }
+
     try {
-      let url: string;
-      let filterType: 'ingredient' | 'country' | 'category' | 'all' = 'all';
-      let filterValue: string | undefined;
-
-      if (queryDto.ingredient) {
-        url = `${this.baseUrl}/filter.php?i=${encodeURIComponent(queryDto.ingredient)}`;
-        filterType = 'ingredient';
-        filterValue = queryDto.ingredient;
-      } else if (queryDto.country) {
-        url = `${this.baseUrl}/filter.php?a=${encodeURIComponent(queryDto.country)}`;
-        filterType = 'country';
-        filterValue = queryDto.country;
-      } else if (queryDto.category) {
-        url = `${this.baseUrl}/filter.php?c=${encodeURIComponent(queryDto.category)}`;
-        filterType = 'category';
-        filterValue = queryDto.category;
-      } else if (queryDto.search) {
-        url = `${this.baseUrl}/search.php?s=${encodeURIComponent(queryDto.search)}`;
-        filterType = 'all';
-        filterValue = queryDto.search;
-      } else {
-        url = `${this.baseUrl}/search.php?s=`;
-        filterType = 'all';
-      }
-
       this.logger.log(`Fetching recipes from: ${url}`);
-
       const response = await firstValueFrom(
         this.httpService.get<{ meals: MealApiResponse[] }>(url, {
           timeout: 10000,
         }),
       );
-
       const meals: MealApiResponse[] = response.data.meals || [];
-
       if (!meals.length) {
         return {
           recipes: [],
@@ -89,24 +87,31 @@ export class RecipesService {
           filter: { type: filterType, value: filterValue },
         };
       }
-
       const recipes: RecipeListItemDto[] = meals.map((meal) => ({
         idMeal: meal.idMeal,
         strMeal: meal.strMeal,
         strMealThumb: meal.strMealThumb,
       }));
-
       return {
         recipes,
         total: recipes.length,
         filter: { type: filterType, value: filterValue },
       };
     } catch (error) {
-      this.logger.error('Error fetching recipes:', error.message);
-      if (error.response?.status) {
+      if (isAxiosError(error) && error.response) {
+        this.logger.error(
+          `Error fetching recipes. Status: ${error.response.status}, Data: ${JSON.stringify(error.response.data)}`,
+        );
         throw new HttpException(
           `External API error: ${error.response.statusText}`,
           error.response.status,
+        );
+      } else if (error instanceof Error) {
+        this.logger.error('Error fetching recipes:', error.message);
+      } else {
+        this.logger.error(
+          'An unknown error occurred while fetching recipes:',
+          error,
         );
       }
       throw new HttpException(
@@ -117,39 +122,43 @@ export class RecipesService {
   }
 
   async getRecipeById(id: string): Promise<RecipeDetailDto> {
+    const url = `${this.baseUrl}/lookup.php?i=${encodeURIComponent(id)}`;
+
     try {
-      const url = `${this.baseUrl}/lookup.php?i=${encodeURIComponent(id)}`;
-
       this.logger.log(`Fetching recipe details from: ${url}`);
-
       const response = await firstValueFrom(
         this.httpService.get<{ meals: MealApiResponse[] }>(url, {
           timeout: 10000,
         }),
       );
-
       const meals: MealApiResponse[] = response.data.meals;
-
       if (!meals || meals.length === 0) {
         throw new HttpException(
           `Recipe with ID ${id} not found`,
           HttpStatus.NOT_FOUND,
         );
       }
-
       const meal = meals[0];
       return this.transformToRecipeDetail(meal);
     } catch (error) {
-      this.logger.error(`Error fetching recipe ${id}:`, error.message);
-
       if (error instanceof HttpException) {
         throw error;
       }
 
-      if (error.response?.status) {
+      if (isAxiosError(error) && error.response) {
+        this.logger.error(
+          `Error fetching recipe ${id}. Status: ${error.response.status}, Data: ${JSON.stringify(error.response.data)}`,
+        );
         throw new HttpException(
           `External API error: ${error.response.statusText}`,
           error.response.status,
+        );
+      } else if (error instanceof Error) {
+        this.logger.error(`Error fetching recipe ${id}:`, error.message);
+      } else {
+        this.logger.error(
+          `An unknown error occurred while fetching recipe ${id}:`,
+          error,
         );
       }
 
